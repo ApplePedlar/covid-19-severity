@@ -2,13 +2,18 @@
   .top
     h1 {{ $t("message.title") }}
     .about {{ $t("message.about") }}
-    v-data-table(
+    v-data-table.table(
       :headers="tableHeaders",
       :items="tableData",
       :items-per-page="100",
       :hide-default-footer="true",
       :sort-by="['numberOfDeathsPerWeekPerPop']",
       :sort-desc="[true]")
+    .last-update {{ $t("message.lastUpdate") }}: {{ lastUpdate }}
+    .project-home {{ $t("message.projectHome") }}: 
+      a(href="https://github.com/ApplePedlar/covid-19-severity" target="_new") GitHub ApplePedlar/covid-19-severity
+    .data-source {{ $t("message.dataSource") }}: 
+      a(href="https://github.com/pomber/covid19" target="_new") GitHub pomber/covid19
 </template>
 
 <script>
@@ -20,6 +25,7 @@ import populations from "./populations.json"
 export default {
   data () {
     return {
+      sourceUrl: 'https://pomber.github.io/covid19/timeseries.json',
       tableHeaders: [
         { text: this.$t("message.country"), align: "start", value: "country", width: "125px" },
         { text: this.$t("message.population"), align: "start", value: "population" },
@@ -29,15 +35,17 @@ export default {
         { text: this.$t("message.numberOfDeathsPerWeekPerPop"), align: "start", value: "numberOfDeathsPerWeekPerPop" },
       ],
       tableData: [],
-      populations: populations
+      populations: populations,
+      lastUpdate: ""
     }
   },
   mounted () {
     axios
-      .get('https://pomber.github.io/covid19/timeseries.json')
+      .get(this.sourceUrl)
       .then(response => {
         let records = response.data
         let countries = Object.keys(records)
+        this.lastUpdate = records["Japan"][records["Japan"].length - 1].date
         for (let i = 0; i < countries.length; i++) {
           let country = countries[i]
           let totalNumberOfDeaths = records[country][records[country].length - 1].deaths
@@ -61,17 +69,18 @@ export default {
           }
         }
       })
-  },
-  methods: {
   }
 }
 </script>
 
 <style lang="sass">
-
 .top
   max-width: 800px
   margin: 30px auto
   .about
     margin: 20px
+  .table
+    margin-bottom: 20px
+  .project-home, .data-source, .last-update
+    font-size: 12px
 </style>

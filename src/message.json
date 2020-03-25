@@ -8,7 +8,10 @@
       "totalNumberOfDeaths": "Total number of deaths",
       "numberOfDeathsPerWeek": "Number of deaths per week",
       "totalNumberOfDeathsPerPop": "Cumulative deaths per 10 million people",
-      "numberOfDeathsPerWeekPerPop": "Number of deaths per week per 10 million people"
+      "numberOfDeathsPerWeekPerPop": "Number of deaths per week per 10 million people",
+      "projectHome": "Project home",
+      "dataSource": "Data source",
+      "lastUpdate": "Last update"
     },
     "country": {
       "China": "China",
@@ -221,7 +224,10 @@
       "totalNumberOfDeaths": "累計死亡者数",
       "numberOfDeathsPerWeek": "1週間の死亡者数",
       "totalNumberOfDeathsPerPop": "1000万人あたりの累計死亡者数",
-      "numberOfDeathsPerWeekPerPop": "1000万人あたりの1週間の死亡者数"
+      "numberOfDeathsPerWeekPerPop": "1000万人あたりの1週間の死亡者数",
+      "projectHome": "Project home",
+      "dataSource": "情報ソース",
+      "lastUpdate": "最終更新日"
     },
     "country": {
       "China": "中国",
