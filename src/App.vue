@@ -8,7 +8,8 @@
       :items-per-page="100",
       :hide-default-footer="true",
       :sort-by="['numberOfDeathsPerWeekPerPop']",
-      :sort-desc="[true]")
+      :sort-desc="[true]",
+      :mobile-breakpoint="0")
     .last-update {{ $t("message.lastUpdate") }}: {{ lastUpdate }}
     .project-home {{ $t("message.projectHome") }}: 
       a(href="https://github.com/ApplePedlar/covid-19-severity" target="_new") GitHub ApplePedlar/covid-19-severity
@@ -27,8 +28,8 @@ export default {
     return {
       sourceUrl: 'https://pomber.github.io/covid19/timeseries.json',
       tableHeaders: [
-        { text: this.$t("message.country"), align: "start", value: "country", width: "125px" },
-        { text: this.$t("message.population"), align: "start", value: "population" },
+        { text: this.$t("message.country"), align: "start", value: "country", width: "100px" },
+        // { text: this.$t("message.population"), align: "start", value: "population" },
         { text: this.$t("message.totalNumberOfDeaths"), align: "start", value: "totalNumberOfDeaths" },
         { text: this.$t("message.numberOfDeathsPerWeek"), align: "start", value: "numberOfDeathsPerWeek" },
         { text: this.$t("message.totalNumberOfDeathsPerPop"), align: "start", value: "totalNumberOfDeathsPerPop" },
@@ -77,6 +78,8 @@ export default {
 .top
   max-width: 800px
   margin: 30px auto
+  h1
+    font-size: 24px
   .about
     margin: 20px
   .table
