@@ -20,7 +20,6 @@
 <script>
 
 import axios from "axios"
-import csvParse from "csv-parse"
 import populations from "./populations.json"
 
 export default {
@@ -29,7 +28,6 @@ export default {
       sourceUrl: 'https://pomber.github.io/covid19/timeseries.json',
       tableHeaders: [
         { text: this.$t("message.country"), align: "start", value: "country", width: "100px" },
-        // { text: this.$t("message.population"), align: "start", value: "population" },
         { text: this.$t("message.totalNumberOfDeaths"), align: "start", value: "totalNumberOfDeaths" },
         { text: this.$t("message.numberOfDeathsPerWeek"), align: "start", value: "numberOfDeathsPerWeek" },
         { text: this.$t("message.totalNumberOfDeathsPerPop"), align: "start", value: "totalNumberOfDeathsPerPop" },
@@ -47,28 +45,26 @@ export default {
         let records = response.data
         let countries = Object.keys(records)
         this.lastUpdate = records["Japan"][records["Japan"].length - 1].date
-        for (let i = 0; i < countries.length; i++) {
-          let country = countries[i]
+        countries.forEach(country => {
           let totalNumberOfDeaths = records[country][records[country].length - 1].deaths
           let numberOfDeathsPerWeek = totalNumberOfDeaths - records[country][records[country].length - 8].deaths
 
-          if (numberOfDeathsPerWeek >= 10) {
+          if (totalNumberOfDeaths > 0) {
             let population = this.populations[country]
-            if (!population) {
-              continue
+            if (population) {
+              let totalNumberOfDeathsPerPop = Math.round(totalNumberOfDeaths / (population / 10000000) * 10) / 10
+              let numberOfDeathsPerWeekPerPop = Math.round(numberOfDeathsPerWeek / (population / 10000000) * 10) / 10
+              this.tableData.push({
+                country: this.$t("country." + country) || country,
+                population: population,
+                totalNumberOfDeaths: totalNumberOfDeaths,
+                numberOfDeathsPerWeek: numberOfDeathsPerWeek,
+                totalNumberOfDeathsPerPop: totalNumberOfDeathsPerPop,
+                numberOfDeathsPerWeekPerPop: numberOfDeathsPerWeekPerPop
+              })
             }
-            let totalNumberOfDeathsPerPop = Math.round(totalNumberOfDeaths / (population / 10000000) * 10) / 10
-            let numberOfDeathsPerWeekPerPop = Math.round(numberOfDeathsPerWeek / (population / 10000000) * 10) / 10
-            this.tableData.push({
-              country: this.$t("country." + country) || country,
-              population: population,
-              totalNumberOfDeaths: totalNumberOfDeaths,
-              numberOfDeathsPerWeek: numberOfDeathsPerWeek,
-              totalNumberOfDeathsPerPop: totalNumberOfDeathsPerPop,
-              numberOfDeathsPerWeekPerPop: numberOfDeathsPerWeekPerPop
-            })
           }
-        }
+        })
       })
   }
 }
@@ -84,6 +80,7 @@ export default {
     margin: 20px
   .table
     margin-bottom: 20px
+    border: 1px solid silver
   .project-home, .data-source, .last-update
     font-size: 12px
 </style>
