@@ -7,8 +7,8 @@
       :items="tableData",
       :items-per-page="100",
       :hide-default-footer="true",
-      :sort-by="['numberOfDeathsPerWeekPerPop']",
-      :sort-desc="[true]",
+      :sort-by.sync="sortBy",
+      :sort-desc.sync="sortDesc",
       :mobile-breakpoint="0")
     .last-update {{ $t("message.lastUpdate") }}: {{ lastUpdate }}
     .project-home {{ $t("message.projectHome") }}: 
@@ -30,9 +30,11 @@ export default {
         { text: this.$t("message.country"), align: "start", value: "country", width: "100px" },
         { text: this.$t("message.totalNumberOfDeaths"), align: "start", value: "totalNumberOfDeaths" },
         { text: this.$t("message.numberOfDeathsPerWeek"), align: "start", value: "numberOfDeathsPerWeek" },
-        { text: this.$t("message.totalNumberOfDeathsPerPop"), align: "start", value: "totalNumberOfDeathsPerPop" },
-        { text: this.$t("message.numberOfDeathsPerWeekPerPop"), align: "start", value: "numberOfDeathsPerWeekPerPop" },
+        { text: this.$t("message.totalNumberOfDeathsPerPop"), align: "start", value: "totalNumberOfDeathsPerPop", sort: (a, b) => (Number(a) - Number(b)) },
+        { text: this.$t("message.numberOfDeathsPerWeekPerPop"), align: "start", value: "numberOfDeathsPerWeekPerPop", sort: (a, b) => (Number(a) - Number(b)) },
       ],
+      sortBy: 'numberOfDeathsPerWeekPerPop',
+      sortDesc: true,
       tableData: [],
       populations: populations,
       lastUpdate: ""
@@ -52,8 +54,8 @@ export default {
           if (totalNumberOfDeaths > 0) {
             let population = this.populations[country]
             if (population) {
-              let totalNumberOfDeathsPerPop = Math.round(totalNumberOfDeaths / (population / 10000000) * 10) / 10
-              let numberOfDeathsPerWeekPerPop = Math.round(numberOfDeathsPerWeek / (population / 10000000) * 10) / 10
+              let totalNumberOfDeathsPerPop = (Math.round(totalNumberOfDeaths / (population / 10000000) * 10) / 10).toFixed(1)
+              let numberOfDeathsPerWeekPerPop = (Math.round(numberOfDeathsPerWeek / (population / 10000000) * 10) / 10).toFixed(1)
               this.tableData.push({
                 country: this.$t("country." + country) || country,
                 population: population,
@@ -66,6 +68,13 @@ export default {
           }
         })
       })
+  },
+  watch: {
+    sortDesc (newSortDesc, oldSortDesc) {
+      this.$nextTick(() => {
+        this.sortDesc = true
+      })
+    }
   }
 }
 </script>
