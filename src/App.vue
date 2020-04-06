@@ -10,6 +10,7 @@
       :sort-by.sync="sortBy",
       :sort-desc.sync="sortDesc",
       :mobile-breakpoint="0")
+    .note {{$t("message.increaseRatioOfDeaths")}}: {{ $t("message.increaseRatioOfDeathsDescription") }}
     .last-update {{ $t("message.lastUpdate") }}: {{ lastUpdate }}
     .project-home {{ $t("message.projectHome") }}: 
       a(href="https://github.com/ApplePedlar/covid-19-severity" target="_new") GitHub ApplePedlar/covid-19-severity
@@ -32,6 +33,7 @@ export default {
         { text: this.$t("message.numberOfDeathsPerWeek"), align: "start", value: "numberOfDeathsPerWeek" },
         { text: this.$t("message.totalNumberOfDeathsPerPop"), align: "start", value: "totalNumberOfDeathsPerPop", sort: (a, b) => (Number(a) - Number(b)) },
         { text: this.$t("message.numberOfDeathsPerWeekPerPop"), align: "start", value: "numberOfDeathsPerWeekPerPop", sort: (a, b) => (Number(a) - Number(b)) },
+        { text: this.$t("message.increaseRatioOfDeaths"), align: "start", value: "increaseRatioOfDeaths", sort: (a, b) => (Number(a) - Number(b)) },
       ],
       sortBy: 'numberOfDeathsPerWeekPerPop',
       sortDesc: true,
@@ -50,19 +52,25 @@ export default {
         countries.forEach(country => {
           let totalNumberOfDeaths = records[country][records[country].length - 1].deaths
           let numberOfDeathsPerWeek = totalNumberOfDeaths - records[country][records[country].length - 8].deaths
+          let numberOfDeathsPerWeek2 = records[country][records[country].length - 8].deaths - records[country][records[country].length - 15].deaths
 
           if (totalNumberOfDeaths > 0) {
             let population = this.populations[country]
             if (population) {
               let totalNumberOfDeathsPerPop = (Math.round(totalNumberOfDeaths / (population / 10000000) * 10) / 10).toFixed(1)
               let numberOfDeathsPerWeekPerPop = (Math.round(numberOfDeathsPerWeek / (population / 10000000) * 10) / 10).toFixed(1)
+              let increaseRatioOfDeaths = ""
+              if (numberOfDeathsPerWeek2 > 0) {
+                increaseRatioOfDeaths = (Math.round(numberOfDeathsPerWeek / numberOfDeathsPerWeek2 * 1000) / 1000).toFixed(3)
+              }
               this.tableData.push({
                 country: this.$t("country." + country) || country,
                 population: population,
                 totalNumberOfDeaths: totalNumberOfDeaths,
                 numberOfDeathsPerWeek: numberOfDeathsPerWeek,
                 totalNumberOfDeathsPerPop: totalNumberOfDeathsPerPop,
-                numberOfDeathsPerWeekPerPop: numberOfDeathsPerWeekPerPop
+                numberOfDeathsPerWeekPerPop: numberOfDeathsPerWeekPerPop,
+                increaseRatioOfDeaths: increaseRatioOfDeaths
               })
             }
           }
@@ -90,6 +98,6 @@ export default {
   .table
     margin-bottom: 20px
     border: 1px solid silver
-  .project-home, .data-source, .last-update
+  .project-home, .data-source, .last-update, .note
     font-size: 12px
 </style>

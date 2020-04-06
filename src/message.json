@@ -9,6 +9,8 @@
       "numberOfDeathsPerWeek": "Number of deaths per week",
       "totalNumberOfDeathsPerPop": "Cumulative deaths per 10 million people",
       "numberOfDeathsPerWeekPerPop": "Number of deaths per week per 10 million people",
+      "increaseRatioOfDeaths": "Increase ratio of deaths(※)",
+      "increaseRatioOfDeathsDescription": "A number that expresses how many times the number of new deaths in the last seven days is the number in the previous seven days.",
       "projectHome": "Project home",
       "dataSource": "Data source",
       "lastUpdate": "Last update"
@@ -225,6 +227,8 @@
       "numberOfDeathsPerWeek": "1週間の死亡者数",
       "totalNumberOfDeathsPerPop": "1000万人あたりの累計死亡者数",
       "numberOfDeathsPerWeekPerPop": "1000万人あたりの1週間の死亡者数",
+      "increaseRatioOfDeaths": "死亡者数増加率(※)",
+      "increaseRatioOfDeathsDescription": "直近7日間の新規死亡者数がその前の7日間の数の何倍か",
       "projectHome": "Project home",
       "dataSource": "情報ソース",
       "lastUpdate": "最終更新日"
